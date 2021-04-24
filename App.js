@@ -31,10 +31,12 @@ class App {
   };
 
   onInputChange = async () => {
-    if (this.elFileInput.files) {
-      const file = this.elFileInput.files[0];
+    console.log(this.elFileInput, this.elFileInput.files);
+    if (this.elFileInput.files.length > 0) {
+      // remove existing files from dom
+      this.elImagePreview.innerHTML = "";
 
-      console.log(file);
+      const file = this.elFileInput.files[0];
 
       this.responsiveImages = await resizeImages({
         file,

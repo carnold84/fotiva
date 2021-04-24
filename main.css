@@ -28,10 +28,24 @@ body {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .controls > * {
   margin: 0 0 20px;
+}
+
+@media (min-width: 1024px) {
+  .controls {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .controls > * {
+    margin: 0 20px 0 0;
+  }
 }
 
 .btn {
@@ -65,8 +79,18 @@ body {
 }
 
 .file-upload .file-input {
-  align-items: center;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-upload .file-input .file-input-label {
+  color: var(--text-color2);
+  margin: 0 0 3px;
+}
+
+.file-upload .file-input .file-input-inner {
+  align-items: center;
   display: flex;
 }
 
@@ -75,20 +99,21 @@ body {
   border-bottom-left-radius: 0;
 }
 
-.file-upload .file-input .btn:hover {
-  background-color: var(--primary1);
-  border: 1px solid var(--primary2);
-}
-
 .file-upload .file-input input[type="file"]:focus ~ .btn {
   background-color: var(--color4);
   border: 1px solid var(--color5);
   outline: none;
 }
 
+.file-upload .file-input input[type="file"] ~ .btn:hover {
+  background-color: var(--primary1);
+  border: 1px solid var(--primary2);
+}
+
 .file-upload .file-input input[type="file"] {
   opacity: 0;
   position: absolute;
+  width: 0;
 }
 
 .file-upload .name {
@@ -106,6 +131,11 @@ body {
   line-height: 0.8rem;
   margin: 0;
   padding: 0 10px;
+}
+
+.file-upload .file-input input[type="file"]:focus ~ .name {
+  border: 1px solid var(--color6);
+  outline: none;
 }
 
 .text-input {
@@ -139,8 +169,26 @@ body {
 
 .preview-images {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
+}
+
+@media (min-width: 500px) {
+  .preview-images {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 800px) {
+  .preview-images {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .preview-images {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .preview-image {

@@ -15,17 +15,20 @@
   </head>
   <body>
     <div id="app">
+      <div id="message"></div>
       <div class="controls">
-        <div id="message"></div>
         <div class="file-upload">
           <label class="file-input">
-            <input type="file" />
-            <p class="name">No file selected</p>
-            <div class="btn">Select Image</div>
+            <span class="file-input-label">Original Image</span>
+            <div class="file-input-inner">
+              <input type="file" />
+              <p class="name">No file selected</p>
+              <div class="btn">Select Image</div>
+            </div>
           </label>
         </div>
         <div class="text-input">
-          <label for="file-name">File name:</label>
+          <label for="file-name">New Images Name</label>
           <input id="file-name" type="text" />
         </div>
         <button class="btn" id="download-btn">Download ZIP</button>
