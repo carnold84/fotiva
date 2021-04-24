@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title>Responsive Image Resizer</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
+    <link href="main.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="controls">
+        <div id="message"></div>
+        <div class="file-upload">
+          <label class="file-input">
+            <input type="file" />
+            <p class="name">No file selected</p>
+            <div class="btn">Select Image</div>
+          </label>
+        </div>
+        <div class="text-input">
+          <label for="file-name">File name:</label>
+          <input id="file-name" type="text" />
+        </div>
+        <button class="btn" id="download-btn">Download ZIP</button>
+      </div>
+      <div class="preview-images"></div>
+    </div>
+    <template id="image-template">
+      <a class="preview-image" target="_blank" rel="noopener noreferrer">
+        <img class="img" crossorigin="anonymous" />
+        <p class="text"></p>
+      </a>
+    </template>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
+      integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.1/jszip.min.js"
+      integrity="sha512-EVW/cmqgoWGVZ4my35NdtOntZHRK+ejCIrmx5af9S6b9FKJfMkZ87ths7iD4iyKzS0++3gZhsdLtxE9tlNsgaQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script src="main.js" type="module"></script>
+  </body>
+</html>
