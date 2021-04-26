@@ -73,7 +73,6 @@ body {
 }
 
 .file-upload {
-  cursor: pointer;
   min-width: 400px;
   position: relative;
 }

@@ -18,14 +18,7 @@
       <div id="message"></div>
       <div class="controls">
         <div class="file-upload">
-          <label class="file-input">
-            <span class="file-input-label">Original Image</span>
-            <div class="file-input-inner">
-              <input type="file" />
-              <p class="name">No file selected</p>
-              <div class="btn">Select Image</div>
-            </div>
-          </label>
+          <file-input id="file-input" label="Original Image"></file-input>
         </div>
         <div class="text-input">
           <label for="file-name">New Images Name</label>
@@ -35,12 +28,6 @@
       </div>
       <div class="preview-images"></div>
     </div>
-    <template id="image-template">
-      <a class="preview-image" target="_blank" rel="noopener noreferrer">
-        <img class="img" crossorigin="anonymous" />
-        <p class="text"></p>
-      </a>
-    </template>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
       integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
@@ -51,6 +38,8 @@
       integrity="sha512-EVW/cmqgoWGVZ4my35NdtOntZHRK+ejCIrmx5af9S6b9FKJfMkZ87ths7iD4iyKzS0++3gZhsdLtxE9tlNsgaQ=="
       crossorigin="anonymous"
     ></script>
-    <script src="main.js" type="module"></script>
+    <script src="js/components/FileInput.js"></script>
+    <script src="js/components/ImageCard.js"></script>
+    <script src="js/main.js" type="module"></script>
   </body>
 </html>

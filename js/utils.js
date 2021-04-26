@@ -57,6 +57,7 @@ export const resizeImages = ({ file, sizes }) => {
             canvas,
             ext,
             height: newHeight,
+            src: canvas.toDataURL(),
             url: URL.createObjectURL(val),
             width: newWidth,
           });

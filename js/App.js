@@ -19,9 +19,8 @@ class App {
 
     this.elMessage = document.querySelector("#message");
 
-    this.elFileInput = document.querySelector(".file-input input[type=file]");
-    this.elFileInput.addEventListener("change", this.onInputChange);
-    this.elFileInputName = document.querySelector(".file-input .name");
+    this.elFileInput = document.querySelector("#file-input");
+    this.elFileInput.addEventListener("select", this.onInputChange);
 
     this.elFileName = document.querySelector("#file-name");
   };
@@ -30,36 +29,26 @@ class App {
     this.elMessage.innerHTML = message;
   };
 
-  onInputChange = async () => {
-    console.log(this.elFileInput, this.elFileInput.files);
-    if (this.elFileInput.files.length > 0) {
+  onInputChange = async (evt) => {
+    const file = evt.detail.file;
+
+    if (file) {
       // remove existing files from dom
       this.elImagePreview.innerHTML = "";
-
-      const file = this.elFileInput.files[0];
 
       this.responsiveImages = await resizeImages({
         file,
         sizes: [{ width: 400 }, { width: 800 }, { width: 1200 }],
       });
 
-      this.elFileInputName.innerHTML = file.name;
       this.elFileName.value =
         file.name.substr(0, file.name.lastIndexOf(".")) || file.name;
 
       this.responsiveImages.forEach((image) => {
-        const elImage = this.elImageTemplate.content.cloneNode(true);
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => {
-          elImage
-            .querySelector(".preview-image")
-            .setAttribute("href", image.url);
-          elImage.querySelector(".img").src = img.src;
-          elImage.querySelector(".text").innerHTML = `Width: ${img.width}`;
-          this.elImagePreview.appendChild(elImage);
-        };
-        img.src = image.canvas.toDataURL();
+        const elImageCard = document.createElement("image-card");
+        elImageCard.setAttribute("src", image.src);
+        elImageCard.setAttribute("url", image.url);
+        this.elImagePreview.appendChild(elImageCard);
       });
     }
   };
