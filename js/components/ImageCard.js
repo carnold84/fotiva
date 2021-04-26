@@ -39,7 +39,6 @@ class ImageCard extends HTMLElement {
 
   constructor() {
     super();
-    console.log("ImageCard");
 
     const shadow = this.attachShadow({ mode: "open" });
 
@@ -75,7 +74,6 @@ class ImageCard extends HTMLElement {
   };
 
   updateUrl = (url) => {
-    console.log(url);
     this.elImageCard.setAttribute("href", url);
   };
 }
