@@ -20,55 +20,24 @@ export const createZip = async (images, imageName = "image") => {
   });
 };
 
-export const resizeImages = ({ file, sizes }) => {
+export const resizeImages = async ({ file, sizes }) => {
   return new Promise((resolve, reject) => {
     const images = [];
     let count = 0;
 
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = URL.createObjectURL(file);
-    img.onload = () => {
-      sizes.forEach(({ width }) => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        let ext;
-        let prop;
-        let newHeight;
-        let newWidth;
+    const createImage = async ({ height, width }) => {
+      const image = await resizeImage({ file, height, width });
+      images.push(image);
 
-        if (width) {
-          prop = width / img.width;
-          newHeight = img.height * prop;
-          newWidth = width;
-        }
-
-        if (file.type === "image/jpeg") {
-          ext = "jpg";
-        } else if (file.type === "image/png") {
-          ext = "png";
-        }
-
-        canvas.height = newHeight;
-        canvas.width = newWidth;
-        ctx.drawImage(img, 0, 0, width, newHeight);
-        canvas.toBlob((val) => {
-          images.push({
-            canvas,
-            ext,
-            height: newHeight,
-            src: canvas.toDataURL(),
-            url: URL.createObjectURL(val),
-            width: newWidth,
-          });
-
-          if (count === sizes.length - 1) {
-            resolve(images);
-          }
-          count++;
-        });
-      });
+      if (count === sizes.length - 1) {
+        resolve(images);
+      }
+      count++;
     };
+
+    sizes.forEach(({ height, width }) => {
+      createImage({ height, width });
+    });
   });
 };
 

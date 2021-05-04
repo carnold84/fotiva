@@ -1,4 +1,4 @@
-import { createZip, resizeImage } from "./utils.js";
+import { createZip, resizeImage, resizeImages } from "./utils.js";
 
 class App {
   elAddImageBtn;
@@ -44,21 +44,36 @@ class App {
     const file = evt.detail.file;
 
     if (file) {
-      // remove existing files from dom
-      this.elImagePreview.innerHTML = "";
-
       this.selectedFile = file;
-      const fileName = this.selectedFile.name;
-
-      this.elFileName.value =
-        fileName.substr(0, fileName.lastIndexOf(".")) || fileName;
 
       // enable adding a new size image as we have an image to size!
       this.elAddImageBtn.removeAttribute("disabled");
+
+      if (this.responsiveImages.length > 0) {
+        // remove existing files from dom
+        this.elImagePreview.innerHTML = "";
+
+        const sizes = this.responsiveImages.map(({ height, width }) => {
+          return {
+            height,
+            width,
+          };
+        });
+        this.responsiveImages = await resizeImages({
+          file: this.selectedFile,
+          sizes,
+        });
+        console.log(this.responsiveImages);
+        this.responsiveImages.forEach((image) => {
+          this.createImageCard({ image });
+        });
+      } else {
+        const fileName = this.selectedFile.name;
+        this.elFileName.value =
+          fileName.substr(0, fileName.lastIndexOf(".")) || fileName;
+      }
     }
   };
-
-  createImage = () => {};
 
   onDownload = async (evt) => {
     evt.preventDefault();
@@ -114,22 +129,24 @@ class App {
   onSaveImage = async (evt) => {
     evt.preventDefault();
 
-    const newImage = await resizeImage({
+    const image = await resizeImage({
       file: this.selectedFile,
       height: document.querySelector("#image-height").value,
       width: document.querySelector("#image-width").value,
     });
 
-    console.log(newImage);
+    this.responsiveImages.push(image);
 
-    this.responsiveImages.push(newImage);
-
-    const elImageCard = document.createElement("image-card");
-    elImageCard.setAttribute("src", newImage.src);
-    elImageCard.setAttribute("url", newImage.url);
-    this.elImagePreview.appendChild(elImageCard);
+    this.createImageCard({ image });
 
     this.closeAddImageModal();
+  };
+
+  createImageCard = ({ image }) => {
+    const elImageCard = document.createElement("image-card");
+    elImageCard.setAttribute("src", image.src);
+    elImageCard.setAttribute("url", image.url);
+    this.elImagePreview.appendChild(elImageCard);
   };
 }
 
