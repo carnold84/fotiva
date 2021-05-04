@@ -1,6 +1,9 @@
-import { createZip, resizeImages } from "./utils.js";
+import { createZip, resizeImage } from "./utils.js";
 
 class App {
+  elAddImageBtn;
+  elAddImageModal;
+  elBody;
   elDownloadBtn;
   elImagePreview;
   elImageTemplate;
@@ -8,13 +11,21 @@ class App {
   elFileInputName;
   elFileName;
   elMessage;
-  responsiveImages;
+  responsiveImages = [];
+  selectedFile;
 
   init = () => {
+    this.elAddImageModal = document.querySelector("#add-image-modal");
+
+    this.elAddImageBtn = document.querySelector("#add-image-btn");
+    this.elAddImageBtn.addEventListener("click", this.onAddImage);
+
     this.elDownloadBtn = document.querySelector("#download-btn");
     this.elDownloadBtn.addEventListener("click", this.onDownload);
 
-    this.elImagePreview = document.querySelector(".preview-images");
+    this.elBody = document.querySelector("body");
+
+    this.elImagePreview = document.querySelector("#preview-images");
     this.elImageTemplate = document.querySelector("#image-template");
 
     this.elMessage = document.querySelector("#message");
@@ -36,22 +47,18 @@ class App {
       // remove existing files from dom
       this.elImagePreview.innerHTML = "";
 
-      this.responsiveImages = await resizeImages({
-        file,
-        sizes: [{ width: 400 }, { width: 800 }, { width: 1200 }],
-      });
+      this.selectedFile = file;
+      const fileName = this.selectedFile.name;
 
       this.elFileName.value =
-        file.name.substr(0, file.name.lastIndexOf(".")) || file.name;
+        fileName.substr(0, fileName.lastIndexOf(".")) || fileName;
 
-      this.responsiveImages.forEach((image) => {
-        const elImageCard = document.createElement("image-card");
-        elImageCard.setAttribute("src", image.src);
-        elImageCard.setAttribute("url", image.url);
-        this.elImagePreview.appendChild(elImageCard);
-      });
+      // enable adding a new size image as we have an image to size!
+      this.elAddImageBtn.removeAttribute("disabled");
     }
   };
+
+  createImage = () => {};
 
   onDownload = async (evt) => {
     evt.preventDefault();
@@ -68,6 +75,61 @@ class App {
     } else {
       setError("There's no image!");
     }
+  };
+
+  onAddImage = (evt) => {
+    evt.preventDefault();
+
+    this.openAddImageModal();
+  };
+
+  onCloseAddImageModal = (evt) => {
+    evt.preventDefault();
+
+    this.closeAddImageModal();
+  };
+
+  closeAddImageModal = () => {
+    document
+      .querySelector("#close-add-image-btn")
+      .removeEventListener("click", this.onCloseAddImageModal);
+    document
+      .querySelector("#create-image-btn")
+      .removeEventListener("click", this.onSaveImage);
+    this.elBody.classList.remove("has-modal");
+    this.elAddImageModal.classList.remove("open");
+  };
+
+  openAddImageModal = () => {
+    document
+      .querySelector("#close-add-image-btn")
+      .addEventListener("click", this.onCloseAddImageModal);
+    document
+      .querySelector("#create-image-btn")
+      .addEventListener("click", this.onSaveImage);
+    this.elBody.classList.add("has-modal");
+    this.elAddImageModal.classList.add("open");
+  };
+
+  onSaveImage = async (evt) => {
+    evt.preventDefault();
+
+    const newImage = await resizeImage({
+      file: this.selectedFile,
+      height: document.querySelector("#image-height").value,
+      width: document.querySelector("#image-width").value,
+    });
+
+    console.log(newImage);
+
+    this.responsiveImages.push(newImage);
+
+    const elImageCard = document.createElement("image-card");
+    elImageCard.setAttribute("src", newImage.src);
+    elImageCard.setAttribute("url", newImage.url);
+    this.elImagePreview.appendChild(elImageCard);
+
+    this.closeAddImageModal();
   };
 }
 

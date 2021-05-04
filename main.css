@@ -9,6 +9,20 @@ html {
   --color6: #383b3e;
   --text-color1: #ffffff;
   --text-color2: #8d9297;
+  --text-color3: #6a6e72;
+
+  --file-input__label-color: var(--text-color2);
+  --file-input__btn-color: var(--text-color1);
+  --file-input__btn-bg-color: var(--color2);
+  --file-input__btn-border-color: var(--color3);
+  --file-input__btn-bg-color--focus: var(--color4);
+  --file-input__btn-border-color--focus: var(--color5);
+  --file-input__btn-bg-color--hover: var(--primary1);
+  --file-input__btn-border-color--hover: var(--primary2);
+  --file-input__name-color: var(--text-color2);
+  --file-input__name-bg-color: var(--color1);
+  --file-input__name-border-color: var(--color4);
+  --file-input__name-border-color--focus: var(--color5);
 
   background-color: var(--color1);
   font-family: "Noto Sans JP", sans-serif;
@@ -18,6 +32,10 @@ html {
 body {
   margin: 0;
   padding: 30px;
+}
+
+body.has-modal {
+  overflow: hidden;
 }
 
 * {
@@ -48,6 +66,14 @@ body {
   }
 }
 
+.buttons {
+  display: flex;
+}
+
+.buttons > * {
+  margin: 0 10px 0 0;
+}
+
 .btn {
   align-items: center;
   background-color: var(--color2);
@@ -59,6 +85,11 @@ body {
   font-size: 1rem;
   height: 34px;
   padding: 0 14px;
+}
+
+.btn:disabled {
+  color: var(--text-color3);
+  pointer-events: none;
 }
 
 .btn:focus {
@@ -157,7 +188,6 @@ body {
   font-size: 1rem;
   height: 34px;
   margin: 0;
-  min-width: 400px;
   padding: 0 10px;
 }
 
@@ -208,4 +238,41 @@ body {
   font-size: 1rem;
   margin: 0;
   padding: 8px 10px 10px;
+}
+
+.modal {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal .modal-container {
+  background-color: var(--color1);
+  border-radius: 3px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.modal .modal-content {
+  padding: 20px 20px 10px;
+}
+
+.modal .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px 20px;
+}
+
+.modal .modal-footer > * {
+  margin: 0 0 0 10px;
 }

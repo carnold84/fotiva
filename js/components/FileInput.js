@@ -7,7 +7,7 @@ class FileInput extends HTMLElement {
     }
 
     .file-input .file-input-label {
-      color: var(--text-color2);
+      color: var(--file-input__label-color, #555555);
       margin: 0 0 3px;
     }
 
@@ -18,11 +18,11 @@ class FileInput extends HTMLElement {
 
     .file-input .file-input-btn {
       align-items: center;
-      background-color: var(--color2);
-      border: 1px solid var(--color3);
+      background-color: var(--file-input__btn-bg-color, #eeeeee);
+      border: 1px solid var(--file-input__btn-border-color, #eeeeee);
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px;
-      color: var(--text-color1);
+      color: var(--file-input__btn-color, #222222);
       cursor: pointer;
       display: flex;
       font-size: 1rem;
@@ -31,14 +31,14 @@ class FileInput extends HTMLElement {
     }
 
     .file-input .file-input-input:focus ~ .file-input-btn {
-      background-color: var(--color4);
-      border: 1px solid var(--color5);
+      background-color: var(--file-input__btn-bg-color--focus, #eeeeee);
+      border: 1px solid var(--file-input__btn-border-color--focus, #cccccc);
       outline: none;
     }
 
     .file-input .file-input-input ~ .file-input-btn:hover {
-      background-color: var(--primary1);
-      border: 1px solid var(--primary2);
+      background-color: var(--file-input__btn-bg-color--hover, #dddddd);
+      border: 1px solid var(--file-input__btn-border-color--hover, #cccccc);
     }
 
     .file-input .file-input-input {
@@ -49,12 +49,12 @@ class FileInput extends HTMLElement {
 
     .file-input-name {
       align-items: center;
-      background-color: var(--color1);
-      border: 1px solid var(--color4);
+      background-color: var(--file-input__name-bg-color, #ffffff);
+      border: 1px solid var(--file-input__name-border-color, #eeeeee);
       border-right: none;
       border-bottom-left-radius: 3px;
       border-top-left-radius: 3px;
-      color: var(--text-color2);
+      color: var(--file-input__name-color, #222222);
       display: flex;
       flex-grow: 1;
       font-size: 1rem;
@@ -65,7 +65,7 @@ class FileInput extends HTMLElement {
     }
 
     .file-input .file-input-input:focus ~ .name {
-      border: 1px solid var(--color6);
+      border: 1px solid var(--file-input__name-border-color--focus), #cccccc);
       outline: none;
     }
   `;

@@ -71,3 +71,49 @@ export const resizeImages = ({ file, sizes }) => {
     };
   });
 };
+
+export const resizeImage = ({ file, height, width }) => {
+  return new Promise((resolve, reject) => {
+    let image;
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      let ext;
+      let prop;
+      let newHeight;
+      let newWidth;
+
+      if (width) {
+        prop = width / img.width;
+        newHeight = img.height * prop;
+        newWidth = width;
+      }
+
+      if (file.type === "image/jpeg") {
+        ext = "jpg";
+      } else if (file.type === "image/png") {
+        ext = "png";
+      }
+
+      canvas.height = newHeight;
+      canvas.width = newWidth;
+      ctx.drawImage(img, 0, 0, width, newHeight);
+      canvas.toBlob((val) => {
+        image = {
+          canvas,
+          ext,
+          height: newHeight,
+          src: canvas.toDataURL(),
+          url: URL.createObjectURL(val),
+          width: newWidth,
+        };
+
+        resolve(image);
+      });
+    };
+  });
+};
