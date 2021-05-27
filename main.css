@@ -1,14 +1,15 @@
 html {
   --primary1: #c5611f;
-  --primary2: #ce6926;
+  --primary2: #d36b25;
+  --primary3: #ff934b;
   --color1: #1f2123;
-  --color2: #242628;
-  --color3: #292b2e;
-  --color4: #2e3133;
-  --color5: #333639;
-  --color6: #383b3e;
+  --color2: #2a2d30;
+  --color3: #36393c;
+  --color4: #414549;
+  --color5: #4d5155;
+  --color6: #585d62;
   --text-color1: #ffffff;
-  --text-color2: #8d9297;
+  --text-color2: #a6acb3;
   --text-color3: #6a6e72;
 
   --file-input__label-color: var(--text-color2);
@@ -20,12 +21,14 @@ html {
   --file-input__btn-bg-color--hover: var(--primary1);
   --file-input__btn-border-color--hover: var(--primary2);
   --file-input__name-color: var(--text-color2);
+  --file-input__name-color--focus: var(--text-color1);
   --file-input__name-bg-color: var(--color1);
   --file-input__name-border-color: var(--color4);
+  --file-input__name-border-color--hover: var(--color5);
   --file-input__name-border-color--focus: var(--color5);
 
   background-color: var(--color1);
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: 13px;
 }
 
@@ -129,18 +132,18 @@ body.has-modal {
   border-bottom-left-radius: 0;
 }
 
-.file-upload .file-input input[type="file"]:focus ~ .btn {
+.file-upload .file-input input[type='file']:focus ~ .btn {
   background-color: var(--color4);
   border: 1px solid var(--color5);
   outline: none;
 }
 
-.file-upload .file-input input[type="file"] ~ .btn:hover {
+.file-upload .file-input input[type='file'] ~ .btn:hover {
   background-color: var(--primary1);
   border: 1px solid var(--primary2);
 }
 
-.file-upload .file-input input[type="file"] {
+.file-upload .file-input input[type='file'] {
   opacity: 0;
   position: absolute;
   width: 0;
@@ -163,7 +166,7 @@ body.has-modal {
   padding: 0 10px;
 }
 
-.file-upload .file-input input[type="file"]:focus ~ .name {
+.file-upload .file-input input[type='file']:focus ~ .name {
   border: 1px solid var(--color6);
   outline: none;
 }
@@ -238,41 +241,4 @@ body.has-modal {
   font-size: 1rem;
   margin: 0;
   padding: 8px 10px 10px;
-}
-
-.modal {
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
-  height: 100%;
-  justify-content: center;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-.modal.open {
-  display: flex;
-}
-
-.modal .modal-container {
-  background-color: var(--color1);
-  border-radius: 3px;
-  max-width: 400px;
-  width: 100%;
-}
-
-.modal .modal-content {
-  padding: 20px 20px 10px;
-}
-
-.modal .modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 20px 20px;
-}
-
-.modal .modal-footer > * {
-  margin: 0 0 0 10px;
 }

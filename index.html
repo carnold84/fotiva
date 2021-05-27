@@ -21,40 +21,25 @@
         <div class="file-upload">
           <file-input id="file-input" label="Original Image"></file-input>
         </div>
-        <div class="text-input" style="min-width: 400px">
-          <label for="file-name">New Images Name</label>
-          <input id="file-name" type="text" />
-        </div>
+        <text-input
+          disabled="true"
+          id="file-name"
+          label="New Images Name"
+          name="file-name"
+          style="min-width: 400px"
+        ></text-input>
       </div>
       <div class="controls">
-        <button class="btn" id="download-btn">
+        <ui-button disabled="true" id="download-btn">
           Download Images (Zip File)
-        </button>
-        <button class="btn" disabled="true" id="add-image-btn">
+        </ui-button>
+        <ui-button disabled="true" id="add-image-btn">
           Add New Image Size
-        </button>
+        </ui-button>
       </div>
       <div class="preview-images" id="preview-images"></div>
-      <div class="modal" id="add-image-modal">
-        <div class="modal-container">
-          <div class="modal-content">
-            <div class="text-input" style="margin: 0 0 20px">
-              <label for="image-height">Height</label>
-              <input id="image-height" type="text" />
-            </div>
-            <div class="text-input">
-              <label for="image-width">Width</label>
-              <input id="image-width" type="text" />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn" id="close-add-image-btn">Cancel</button>
-            <button class="btn" id="create-image-btn">Create</button>
-          </div>
-          <div class="modal-overlay"></div>
-        </div>
-      </div>
     </div>
+    <add-image-modal id="add-image-modal"></add-image-modal>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
       integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
@@ -65,8 +50,12 @@
       integrity="sha512-EVW/cmqgoWGVZ4my35NdtOntZHRK+ejCIrmx5af9S6b9FKJfMkZ87ths7iD4iyKzS0++3gZhsdLtxE9tlNsgaQ=="
       crossorigin="anonymous"
     ></script>
+    <script src="js/components/UIButton.js"></script>
+    <script src="js/components/TextInput.js"></script>
     <script src="js/components/FileInput.js"></script>
     <script src="js/components/ImageCard.js"></script>
+    <script src="js/components/ModalDialog.js"></script>
+    <script src="js/AddImageModal.js"></script>
     <script src="js/main.js" type="module"></script>
   </body>
 </html>
