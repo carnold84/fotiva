@@ -16,28 +16,29 @@
   </head>
   <body>
     <div id="app">
-      <div id="message"></div>
-      <div class="controls">
-        <div class="file-upload">
+      <div class="column-1">
+        <div class="controls">
           <file-input id="file-input" label="Original Image"></file-input>
+          <text-input
+            disabled="true"
+            id="file-name"
+            label="New Images Name"
+            name="file-name"
+          ></text-input>
         </div>
-        <text-input
-          disabled="true"
-          id="file-name"
-          label="New Images Name"
-          name="file-name"
-          style="min-width: 400px"
-        ></text-input>
+        <div class="controls">
+          <ui-button disabled="true" id="download-btn">
+            Download Images (Zip File)
+          </ui-button>
+          <ui-button disabled="true" id="add-image-btn">
+            Add New Image Size
+          </ui-button>
+        </div>
       </div>
-      <div class="controls">
-        <ui-button disabled="true" id="download-btn">
-          Download Images (Zip File)
-        </ui-button>
-        <ui-button disabled="true" id="add-image-btn">
-          Add New Image Size
-        </ui-button>
+      <div class="column-2">
+        <div id="message"></div>
+        <div class="preview-images" id="preview-images"></div>
       </div>
-      <div class="preview-images" id="preview-images"></div>
     </div>
     <add-image-modal id="add-image-modal"></add-image-modal>
     <script

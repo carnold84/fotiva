@@ -29,6 +29,7 @@ class TextInput extends HTMLElement {
       line-height: 0.8rem;
       margin: 0;
       padding: 0 10px;
+      white-space: nowrap;
     }
 
     .text-input .text-input-input:disabled {

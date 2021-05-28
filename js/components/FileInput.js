@@ -25,6 +25,7 @@ class FileInput extends HTMLElement {
       color: var(--file-input__btn-color, #222222);
       cursor: pointer;
       display: flex;
+      flex-shrink: 0;
       font-size: 1rem;
       height: 34px;
       padding: 0 14px;
@@ -61,7 +62,9 @@ class FileInput extends HTMLElement {
       height: 34px;
       line-height: 0.8rem;
       margin: 0;
+      overflow: hidden;
       padding: 0 10px;
+      white-space: nowrap;
     }
 
     .file-input .file-input-input:focus ~ .name {
@@ -84,23 +87,23 @@ class FileInput extends HTMLElement {
   elFileInputName;
 
   static get observedAttributes() {
-    return ["label"];
+    return ['label'];
   }
 
   constructor() {
     super();
 
-    const shadow = this.attachShadow({ mode: "open" });
+    const shadow = this.attachShadow({ mode: 'open' });
 
-    const style = document.createElement("style");
+    const style = document.createElement('style');
     style.innerHTML = this.style;
     shadow.innerHTML = this.template;
     shadow.appendChild(style);
 
-    this.elFileInput = shadow.querySelector(".file-input-input");
-    this.elFileInput.addEventListener("change", this.onChange);
-    this.elFileInputLabel = shadow.querySelector(".file-input-label");
-    this.elFileInputName = shadow.querySelector(".file-input-name");
+    this.elFileInput = shadow.querySelector('.file-input-input');
+    this.elFileInput.addEventListener('change', this.onChange);
+    this.elFileInputLabel = shadow.querySelector('.file-input-label');
+    this.elFileInputName = shadow.querySelector('.file-input-name');
   }
 
   onChange = () => {
@@ -112,7 +115,7 @@ class FileInput extends HTMLElement {
       this.elFileInputName.innerHTML = file.name;
     }
 
-    const selectEvent = new CustomEvent("select", {
+    const selectEvent = new CustomEvent('select', {
       detail: {
         file,
       },
@@ -121,7 +124,7 @@ class FileInput extends HTMLElement {
   };
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === "label") {
+    if (name === 'label') {
       this.updateLabel(newValue);
     }
   }
@@ -133,4 +136,4 @@ class FileInput extends HTMLElement {
   };
 }
 
-customElements.define("file-input", FileInput);
+customElements.define('file-input', FileInput);

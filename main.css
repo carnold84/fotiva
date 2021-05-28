@@ -3,11 +3,11 @@ html {
   --primary2: #d36b25;
   --primary3: #ff934b;
   --color1: #1f2123;
-  --color2: #2a2d30;
-  --color3: #36393c;
-  --color4: #414549;
-  --color5: #4d5155;
-  --color6: #585d62;
+  --color2: #26282b;
+  --color3: #2d2f32;
+  --color4: #33373a;
+  --color5: #3a3e41;
+  --color6: #414549;
   --text-color1: #ffffff;
   --text-color2: #a6acb3;
   --text-color3: #6a6e72;
@@ -34,7 +34,6 @@ html {
 
 body {
   margin: 0;
-  padding: 30px;
 }
 
 body.has-modal {
@@ -45,27 +44,84 @@ body.has-modal {
   box-sizing: border-box;
 }
 
-.controls {
-  align-items: flex-start;
+#app {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  height: 100%;
+  position: absolute;
+  width: 100%;
 }
 
-.controls > * {
-  margin: 0 0 20px;
+@media (min-width: 800px) {
+  #app {
+    flex-direction: row;
+  }
+}
+
+.column-1,
+.column-2 {
+  padding: 30px;
+}
+
+.column-1 {
+  background-color: var(--color2);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.column-2 {
+  overflow: auto;
+}
+
+@media (min-width: 800px) {
+  .column-1 {
+    height: auto;
+    max-width: 400px;
+    width: 100%;
+  }
 }
 
 @media (min-width: 1024px) {
+  .preview-images {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+}
+
+.controls:nth-child(1) {
+  margin: 0 0 20px;
+}
+
+.controls > :nth-child(1) {
+  margin: 0 0 20px;
+  width: 100%;
+}
+
+@media (min-width: 600px) and (max-width: 800px) {
   .controls {
-    align-items: flex-end;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
   }
 
-  .controls > * {
-    margin: 0 20px 0 0;
+  .controls:nth-child(1) {
+    margin: 0 0 20px;
+  }
+
+  .controls > :nth-child(1) {
+    margin: 0 10px 0 0;
+    width: 100%;
+  }
+
+  .controls > :nth-child(2) {
+    margin: 0 0 0 10px;
+    width: 100%;
   }
 }
 
@@ -205,21 +261,27 @@ body.has-modal {
   gap: 20px;
 }
 
-@media (min-width: 500px) {
-  .preview-images {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 800px) {
+@media (min-width: 600px) {
   .preview-images {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
+@media (min-width: 800px) {
+  .preview-images {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .preview-images {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (min-width: 1024px) {
   .preview-images {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

@@ -6,15 +6,16 @@ class UIButton extends HTMLElement {
 
     .ui-button {
       align-items: center;
-      background-color: var(--color2);
-      border: 1px solid var(--color2);
+      background-color: var(--color4);
+      border: 1px solid var(--color4);
       border-radius: 3px;
       color: var(--text-color1);
       cursor: pointer;
       display: flex;
       font-size: 1rem;
-      height: 34px;
-      padding: 0 14px;
+      justify-content: center;
+      padding: 8px 14px;
+      width: 100%;
     }
     
     :host([disabled]) .ui-button {
@@ -22,7 +23,7 @@ class UIButton extends HTMLElement {
     }
     
     .ui-button:focus, .ui-button:hover {
-      background-color: var(--color3);
+      background-color: var(--color5);
       border: 1px solid var(--color6);
       outline: none;
     }
