@@ -1,12 +1,21 @@
 class AddImageModal extends HTMLElement {
-  static EVENTS = {
-    IMAGE_ADDED: 'image-added',
-  };
+  style = `
+    .message {
+      background-color: #6d410c;
+      border: 1px solid #845011;
+      color: #d4c3ae;
+      display: none;
+      margin: 0 0 20px;
+      padding: 10px 14px;
+    }
 
-  style = ``;
+    .message.show {
+      display: block;
+    }
+  `;
   template = `
     <modal-dialog id="modal" title="Add Image">
-      <div id="message"></div>
+      <div class="message" id="message"></div>
       <form id="add-image-form">
         <text-input
           default="auto"
@@ -52,15 +61,41 @@ class AddImageModal extends HTMLElement {
     this.elCancelBtn = shadow.querySelector('#cancel-btn');
     this.elAddBtn = shadow.querySelector('#create-image-btn');
     this.elMessage = shadow.querySelector('#message');
+    this.elHeightInput = shadow.querySelector('[name=height]');
+    this.elWidthInput = shadow.querySelector('[name=width]');
   }
 
+  onHeightInputBlur = (evt) => {
+    if (this.elHeightInput.value === '') {
+      this.elHeightInput.value = 'auto';
+    }
+  };
+
+  onWidthInputBlur = (evt) => {
+    if (this.elWidthInput.value === '') {
+      this.elWidthInput.value = 'auto';
+    }
+  };
+
+  open = () => {
+    this.elAddBtn.addEventListener('click', this.onAddBtnClick);
+    this.elCancelBtn.addEventListener('click', this.onCloseBtnClick);
+    this.elHeightInput.addEventListener('blur', this.onHeightInputBlur);
+    this.elWidthInput.addEventListener('blur', this.onWidthInputBlur);
+
+    this.elModal.open();
+  };
+
   close = () => {
-    this.elCancelBtn.removeEventListener('click', this.onCloseBtnClick);
     this.elAddBtn.removeEventListener('click', this.onAddBtnClick);
+    this.elCancelBtn.removeEventListener('click', this.onCloseBtnClick);
+    this.elHeightInput.removeEventListener('blur', this.onHeightInputBlur);
+    this.elWidthInput.removeEventListener('blur', this.onWidthInputBlur);
 
     this.elModal.close();
 
     this.elMessage.innerHTML = '';
+    this.elMessage.classList.remove('show');
   };
 
   onCloseBtnClick = (evt) => {
@@ -69,24 +104,17 @@ class AddImageModal extends HTMLElement {
     this.close();
   };
 
-  open = () => {
-    this.elCancelBtn.addEventListener('click', this.onCloseBtnClick);
-    this.elAddBtn.addEventListener('click', this.onAddBtnClick);
-    this.elModal.open();
-  };
-
   onAddBtnClick = (evt) => {
     evt.preventDefault();
 
-    let height = this.elModal.querySelector('[name=height]').value;
-    let width = this.elModal.querySelector('[name=width]').value;
-
-    console.log(height, width);
+    let height = this.elHeightInput.value;
+    let width = this.elWidthInput.value;
 
     if (isNaN(height) && isNaN(width)) {
       this.elMessage.innerHTML = 'One of height or width must be a number!';
+      this.elMessage.classList.add('show');
     } else {
-      const addImageEvent = new CustomEvent(this.EVENTS.IMAGE_ADDED, {
+      const addImageEvent = new CustomEvent('image-added', {
         detail: {
           height: height || undefined,
           width: width || undefined,
@@ -95,10 +123,6 @@ class AddImageModal extends HTMLElement {
       this.dispatchEvent(addImageEvent);
     }
   };
-
-  get EVENTS() {
-    return AddImageModal.EVENTS;
-  }
 }
 
 customElements.define('add-image-modal', AddImageModal);

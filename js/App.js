@@ -1,4 +1,11 @@
 import { createZip, resizeImage, resizeImages } from './utils.js';
+// import web components
+import './AddImageModal.js';
+import './components/FileInput.js';
+import './components/ImageCard.js';
+import './components/ModalDialog.js';
+import './components/TextInput.js';
+import './components/UIButton.js';
 
 class App {
   elAddImageBtn;
@@ -131,10 +138,7 @@ class App {
   openAddImageModal = () => {
     console.log('openAddImageModal');
 
-    this.elAddImageModal.addEventListener(
-      AddImageModal.EVENTS.IMAGE_ADDED,
-      this.onImageAdded
-    );
+    this.elAddImageModal.addEventListener('image-added', this.onImageAdded);
 
     this.elAddImageModal.open();
   };
