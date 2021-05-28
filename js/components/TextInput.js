@@ -71,8 +71,18 @@ class TextInput extends HTMLElement {
     shadow.appendChild(style);
 
     this.elTextInput = shadow.querySelector('.text-input-input');
+    this.elTextInput.addEventListener('input', this.onChange);
     this.elTextInputLabel = shadow.querySelector('.text-input-label');
   }
+
+  onChange = () => {
+    const changeEvent = new CustomEvent('change', {
+      detail: {
+        value: this.elTextInput.value,
+      },
+    });
+    this.dispatchEvent(changeEvent);
+  };
 
   get value() {
     return this.elTextInput.value;

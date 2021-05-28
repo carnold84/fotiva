@@ -38,7 +38,7 @@ class ModalDialog extends HTMLElement {
     }
     
     .modal-dialog .modal-content {
-      padding: 30px;
+      padding: 15px 30px 30px;
     }
   `;
   template = `
@@ -54,6 +54,10 @@ class ModalDialog extends HTMLElement {
     </div>
   `;
 
+  static get observedAttributes() {
+    return ['max-width', 'width'];
+  }
+
   constructor() {
     super();
 
@@ -66,6 +70,7 @@ class ModalDialog extends HTMLElement {
 
     this.elBody = document.querySelector('body');
     this.el = shadow.querySelector('.modal-dialog');
+    this.elContainer = shadow.querySelector('.modal-container');
     this.elTitle = shadow.querySelector('.modal-title');
 
     this.elTitle.innerHTML = this.getAttribute('title');
@@ -80,6 +85,16 @@ class ModalDialog extends HTMLElement {
     this.elBody.classList.add('has-modal');
     this.el.classList.add('open');
   };
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'max-width') {
+      this.elContainer.style.maxWidth = newValue;
+    }
+
+    if (name === 'width') {
+      this.elContainer.style.width = newValue;
+    }
+  }
 }
 
 customElements.define('modal-dialog', ModalDialog);

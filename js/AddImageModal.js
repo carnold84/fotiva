@@ -12,27 +12,53 @@ class AddImageModal extends HTMLElement {
     .message.show {
       display: block;
     }
+
+    .label {
+      color: var(--text-color2);
+      display: block;
+      margin: 0 0 10px;
+    }
+
+    .inputs {
+      display: flex;
+      justify-content: center;
+      margin: 0 0 20px;
+    }
+
+    .inputs text-input {
+      width: 100px;
+    }
+
+    .inputs p {
+      align-items: center;
+      color: var(--text-color2);
+      display: flex;
+      flex-shrink: 0;
+      margin: 16px 15px 0;
+    }
   `;
   template = `
-    <modal-dialog id="modal" title="Add Image">
+    <modal-dialog id="modal" title="Add Image" width="auto">
       <div class="message" id="message"></div>
       <form id="add-image-form">
-        <text-input
-          default="auto"
-          id="image-height"
-          label="Height"
-          name="height"
-          style="margin: 0 0 20px"
-        >
-        </text-input>
-        <text-input
-          default="600"
-          id="image-width"
-          label="Width"
-          name="width"
-          style="margin: 0 0 20px"
-        >
-        </text-input>
+        <label class="label">Resize image by:</label>
+        <div class="inputs">
+          <text-input
+            default="auto"
+            id="image-height"
+            label="Height"
+            name="height"
+          >
+          </text-input>
+          <p>or</p>
+          <text-input
+            default="600"
+            id="image-width"
+            label="Width"
+            name="width"
+          >
+          </text-input>
+        </div>
         <modal-dialog-footer>
           <ui-button id="cancel-btn">Cancel</ui-button>
           <ui-button
@@ -65,15 +91,19 @@ class AddImageModal extends HTMLElement {
     this.elWidthInput = shadow.querySelector('[name=width]');
   }
 
-  onHeightInputBlur = (evt) => {
-    if (this.elHeightInput.value === '') {
+  onHeightInputBlur = () => {
+    if (isNaN(this.elHeightInput.value)) {
       this.elHeightInput.value = 'auto';
+    } else {
+      this.elWidthInput.value = 'auto';
     }
   };
 
-  onWidthInputBlur = (evt) => {
-    if (this.elWidthInput.value === '') {
+  onWidthInputBlur = () => {
+    if (isNaN(this.elWidthInput.value)) {
       this.elWidthInput.value = 'auto';
+    } else {
+      this.elHeightInput.value = 'auto';
     }
   };
 
@@ -107,8 +137,8 @@ class AddImageModal extends HTMLElement {
   onAddBtnClick = (evt) => {
     evt.preventDefault();
 
-    let height = this.elHeightInput.value;
-    let width = this.elWidthInput.value;
+    let height = parseFloat(this.elHeightInput.value);
+    let width = parseFloat(this.elWidthInput.value);
 
     if (isNaN(height) && isNaN(width)) {
       this.elMessage.innerHTML = 'One of height or width must be a number!';
@@ -116,8 +146,8 @@ class AddImageModal extends HTMLElement {
     } else {
       const addImageEvent = new CustomEvent('image-added', {
         detail: {
-          height: height || undefined,
-          width: width || undefined,
+          height: isNaN(height) ? undefined : height,
+          width: isNaN(width) ? undefined : width,
         },
       });
       this.dispatchEvent(addImageEvent);

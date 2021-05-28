@@ -8,6 +8,7 @@ import './components/TextInput.js';
 import './components/UIButton.js';
 
 class App {
+  cards = [];
   elAddImageBtn;
   elAddImageForm;
   elAddImageModal;
@@ -42,6 +43,7 @@ class App {
     this.elFileInput.addEventListener('select', this.onInputChange);
 
     this.elFileName = document.querySelector('#file-name');
+    this.elFileName.addEventListener('change', this.onFileNameChange);
   };
 
   setError = (message) => {
@@ -67,11 +69,12 @@ class App {
             width,
           };
         });
+
         this.responsiveImages = await resizeImages({
           file: this.selectedFile,
           sizes,
         });
-        console.log(this.responsiveImages);
+
         this.responsiveImages.forEach((image) => {
           this.createImageCard({ image });
         });
@@ -84,14 +87,23 @@ class App {
     }
   };
 
+  createImageName = (image) => {
+    return `${this.elFileName.value}-${Math.round(image.height)}x${Math.round(
+      image.width
+    )}.${image.ext}`;
+  };
+
+  onFileNameChange = (evt) => {
+    this.cards.forEach((card) => {
+      card.name = this.createImageName(card.image);
+    });
+  };
+
   onDownloadBtnClick = async (evt) => {
     evt.preventDefault();
 
     if (this.responsiveImages) {
-      const imageZip = await createZip(
-        this.responsiveImages,
-        this.elFileName.value
-      );
+      const imageZip = await createZip(this.responsiveImages);
 
       let zipFile = await imageZip.generateAsync({ type: 'blob' });
 
@@ -114,6 +126,10 @@ class App {
       width,
     });
 
+    image.name = `${this.elFileName.value}-${Math.round(
+      image.height
+    )}x${Math.round(image.width)}.${image.ext}`;
+
     this.responsiveImages.push(image);
 
     if (
@@ -127,7 +143,6 @@ class App {
   };
 
   onImageAdded = (evt) => {
-    console.log('onAddImageFormSubmit', evt);
     evt.preventDefault();
 
     this.createImages(evt.detail);
@@ -136,8 +151,6 @@ class App {
   };
 
   openAddImageModal = () => {
-    console.log('openAddImageModal');
-
     this.elAddImageModal.addEventListener('image-added', this.onImageAdded);
 
     this.elAddImageModal.open();
@@ -145,8 +158,9 @@ class App {
 
   createImageCard = ({ image }) => {
     const elImageCard = document.createElement('image-card');
-    elImageCard.setAttribute('src', image.src);
-    elImageCard.setAttribute('url', image.url);
+    elImageCard.image = image;
+    elImageCard.name = image.name;
+    this.cards.push(elImageCard);
     this.elImagePreview.appendChild(elImageCard);
   };
 }
