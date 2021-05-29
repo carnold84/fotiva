@@ -4,18 +4,18 @@ export const createZip = async (images) => {
     let count = 0;
 
     images.forEach((image) => {
-      image.canvas.toBlob((val) => {
-        zip.file(image.name, val);
-        if (count === images.length - 1) {
-          resolve(zip);
-        }
-        count++;
-      });
+      zip.file(image.name, image.blob);
+
+      if (count === images.length - 1) {
+        resolve(zip);
+      }
+      count++;
     });
   });
 };
 
 export const resizeImages = async ({ file, sizes }) => {
+  console.log(file, sizes);
   return new Promise((resolve, reject) => {
     const images = [];
     let count = 0;
@@ -37,6 +37,7 @@ export const resizeImages = async ({ file, sizes }) => {
 };
 
 export const resizeImage = ({ file, height, width }) => {
+  console.log(file, height, width);
   return new Promise((resolve, reject) => {
     let image;
 
@@ -46,12 +47,14 @@ export const resizeImage = ({ file, height, width }) => {
     img.crossOrigin = 'anonymous';
     img.src = URL.createObjectURL(file);
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
       let ext;
       let prop;
-      let newHeight;
-      let newWidth;
+      const originalHeight = height;
+      const originalWidth = width;
+      let newHeight = originalHeight;
+      let newWidth = originalWidth;
 
       if (height && width === undefined) {
         prop = height / img.height;
@@ -69,21 +72,33 @@ export const resizeImage = ({ file, height, width }) => {
         ext = 'png';
       }
 
+      console.log(img);
+
       canvas.height = newHeight;
       canvas.width = newWidth;
       ctx.drawImage(img, 0, 0, newWidth, newHeight);
-      canvas.toBlob((val) => {
-        image = {
-          canvas,
-          ext,
-          height: newHeight,
-          src: canvas.toDataURL(),
-          url: URL.createObjectURL(val),
-          width: newWidth,
-        };
+      canvas.toBlob(
+        (val) => {
+          console.log(val);
+          image = {
+            blob: val,
+            ext,
+            height: newHeight,
+            originalHeight,
+            originalWidth,
+            src: canvas.toDataURL(),
+            url: URL.createObjectURL(val),
+            width: newWidth,
+          };
 
-        resolve(image);
-      });
+          canvas = undefined;
+          ctx = undefined;
+
+          resolve(image);
+        },
+        file.type,
+        0.8
+      );
     };
   });
 };

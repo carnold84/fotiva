@@ -8,20 +8,11 @@ import './components/TextInput.js';
 import './components/UIButton.js';
 
 class App {
-  cards = [];
-  elAddImageBtn;
-  elAddImageForm;
-  elAddImageModal;
-  elBody;
-  elDownloadBtn;
-  elImagePreview;
-  elImageTemplate;
-  elFileInput;
-  elFileInputName;
-  elFileName;
-  elMessage;
-  responsiveImages = [];
-  selectedFile;
+  state = {
+    cards: [],
+    responsiveImages: [],
+    selectedFile: undefined,
+  };
 
   init = () => {
     this.elAddImageModal = document.querySelector('#add-image-modal');
@@ -54,34 +45,37 @@ class App {
     const file = evt.detail.file;
 
     if (file) {
-      this.selectedFile = file;
+      this.state.selectedFile = file;
+      const fileName = this.state.selectedFile.name;
+      this.elFileName.value =
+        fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
 
       // enable adding a new size image as we have an image to size!
       this.elAddImageBtn.removeAttribute('disabled');
 
-      if (this.responsiveImages.length > 0) {
+      if (this.state.responsiveImages.length > 0) {
         // remove existing files from dom
         this.elImagePreview.innerHTML = '';
 
-        const sizes = this.responsiveImages.map(({ height, width }) => {
+        console.log(this.state.selectedFile, this.state.responsiveImages);
+
+        const sizes = this.state.responsiveImages.map(({ height, width }) => {
           return {
             height,
             width,
           };
         });
 
-        this.responsiveImages = await resizeImages({
-          file: this.selectedFile,
+        this.state.responsiveImages = await resizeImages({
+          file: this.state.selectedFile,
           sizes,
         });
 
-        this.responsiveImages.forEach((image) => {
+        this.state.responsiveImages.forEach((image) => {
+          image.name = this.createImageName(image);
           this.createImageCard({ image });
         });
       } else {
-        const fileName = this.selectedFile.name;
-        this.elFileName.value =
-          fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
         this.elFileName.setAttribute('disabled', false);
       }
     }
@@ -94,7 +88,7 @@ class App {
   };
 
   onFileNameChange = (evt) => {
-    this.cards.forEach((card) => {
+    this.state.cards.forEach((card) => {
       card.name = this.createImageName(card.image);
     });
   };
@@ -102,8 +96,8 @@ class App {
   onDownloadBtnClick = async (evt) => {
     evt.preventDefault();
 
-    if (this.responsiveImages) {
-      const imageZip = await createZip(this.responsiveImages);
+    if (this.state.responsiveImages) {
+      const imageZip = await createZip(this.state.responsiveImages);
 
       let zipFile = await imageZip.generateAsync({ type: 'blob' });
 
@@ -119,22 +113,20 @@ class App {
     this.openAddImageModal();
   };
 
-  createImages = async ({ height, width }) => {
+  createImage = async ({ height, width }) => {
     const image = await resizeImage({
-      file: this.selectedFile,
+      file: this.state.selectedFile,
       height,
       width,
     });
 
-    image.name = `${this.elFileName.value}-${Math.round(
-      image.height
-    )}x${Math.round(image.width)}.${image.ext}`;
+    image.name = this.createImageName(image);
 
-    this.responsiveImages.push(image);
+    this.state.responsiveImages.push(image);
 
     if (
       this.elDownloadBtn.hasAttribute('disabled') &&
-      this.responsiveImages.length > 0
+      this.state.responsiveImages.length > 0
     ) {
       this.elDownloadBtn.removeAttribute('disabled');
     }
@@ -145,7 +137,7 @@ class App {
   onImageAdded = (evt) => {
     evt.preventDefault();
 
-    this.createImages(evt.detail);
+    this.createImage(evt.detail);
 
     this.elAddImageModal.close();
   };
@@ -160,7 +152,7 @@ class App {
     const elImageCard = document.createElement('image-card');
     elImageCard.image = image;
     elImageCard.name = image.name;
-    this.cards.push(elImageCard);
+    this.state.cards.push(elImageCard);
     this.elImagePreview.appendChild(elImageCard);
   };
 }

@@ -15,6 +15,7 @@ class UIButton extends HTMLElement {
       font-size: 1rem;
       justify-content: center;
       padding: 8px 14px;
+      pointer-events: all;
       width: 100%;
     }
     

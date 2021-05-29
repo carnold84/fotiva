@@ -9,7 +9,6 @@ class ImageCard extends HTMLElement {
       border: 1px solid var(--color4);
       border-radius: 3px;
       display: block;
-      margin: 0 0 40px;
       overflow: hidden;
       text-decoration: none;
     }
