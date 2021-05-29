@@ -58,6 +58,23 @@ body.has-modal {
   }
 }
 
+.logo-container {
+  align-items: flex-end;
+  display: flex;
+  margin: 0 0 20px;
+}
+
+.logo {
+  fill: var(--text-color1);
+  height: 30px;
+  margin: 0 5px 0 0;
+}
+
+.beta {
+  fill: var(--primary3);
+  height: 14px;
+}
+
 .column-1,
 .column-2 {
   padding: 30px;
@@ -93,15 +110,11 @@ body.has-modal {
 .controls {
   display: flex;
   flex-direction: column;
-}
-
-.controls:nth-child(1) {
   margin: 0 0 20px;
 }
 
 .controls > :nth-child(1) {
-  margin: 0 0 20px;
-  width: 100%;
+  margin: 0 0 10px;
 }
 
 @media (min-width: 600px) and (max-width: 800px) {
@@ -129,8 +142,42 @@ body.has-modal {
   display: flex;
 }
 
-.buttons > * {
+.buttons > :nth-child(1) {
   margin: 0 10px 0 0;
+}
+
+.buttons > :nth-child(2) {
+  width: 100%;
+}
+
+@media (min-width: 600px) and (max-width: 800px) {
+  .buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .buttons:nth-child(1) {
+    margin: 0 0 20px;
+  }
+
+  .buttons > :nth-child(1) {
+    margin: 0 10px 0 0;
+    width: 100%;
+  }
+
+  .buttons > :nth-child(2) {
+    margin: 0 0 0 10px;
+    width: 100%;
+  }
+}
+
+#download-btn {
+  display: block;
+}
+
+#download-btn svg {
+  fill: inherit;
+  height: 15px;
 }
 
 .btn {

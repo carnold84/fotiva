@@ -57,8 +57,6 @@ class App {
         // remove existing files from dom
         this.elImagePreview.innerHTML = '';
 
-        console.log(this.state.selectedFile, this.state.responsiveImages);
-
         const sizes = this.state.responsiveImages.map(({ height, width }) => {
           return {
             height,
@@ -90,6 +88,9 @@ class App {
   onFileNameChange = (evt) => {
     this.state.cards.forEach((card) => {
       card.name = this.createImageName(card.image);
+    });
+    this.state.responsiveImages.forEach((image) => {
+      image.name = this.createImageName(image);
     });
   };
 

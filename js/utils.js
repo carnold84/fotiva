@@ -15,7 +15,6 @@ export const createZip = async (images) => {
 };
 
 export const resizeImages = async ({ file, sizes }) => {
-  console.log(file, sizes);
   return new Promise((resolve, reject) => {
     const images = [];
     let count = 0;
@@ -37,11 +36,8 @@ export const resizeImages = async ({ file, sizes }) => {
 };
 
 export const resizeImage = ({ file, height, width }) => {
-  console.log(file, height, width);
   return new Promise((resolve, reject) => {
     let image;
-
-    console.log(height, width);
 
     const img = new Image();
     img.crossOrigin = 'anonymous';
@@ -72,14 +68,11 @@ export const resizeImage = ({ file, height, width }) => {
         ext = 'png';
       }
 
-      console.log(img);
-
       canvas.height = newHeight;
       canvas.width = newWidth;
       ctx.drawImage(img, 0, 0, newWidth, newHeight);
       canvas.toBlob(
         (val) => {
-          console.log(val);
           image = {
             blob: val,
             ext,

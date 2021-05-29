@@ -1,5 +1,9 @@
 class UIButton extends HTMLElement {
   style = `
+    :host {
+      pointer-events: all;
+    }
+
     :host([disabled]) {
       pointer-events: none;
     }
@@ -10,17 +14,18 @@ class UIButton extends HTMLElement {
       border: 1px solid var(--color4);
       border-radius: 3px;
       color: var(--text-color1);
+      fill: var(--text-color1);
       cursor: pointer;
       display: flex;
       font-size: 1rem;
       justify-content: center;
       padding: 8px 14px;
-      pointer-events: all;
       width: 100%;
     }
     
     :host([disabled]) .ui-button {
       color: var(--text-color3);
+      fill: var(--text-color3);
     }
     
     .ui-button:focus, .ui-button:hover {
