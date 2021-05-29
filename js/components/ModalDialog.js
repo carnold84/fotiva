@@ -12,20 +12,33 @@ class ModalDialog extends HTMLElement {
       height: 100%;
       justify-content: center;
       left: 0;
+      opacity: 0;
       position: fixed;
       top: 0;
+      transform: opacity;
+      transition: opacity 500ms ease;
       width: 100%;
     }
     
-    .modal-dialog.open {
+    :host(.open) .modal-dialog {
       display: flex;
+    }
+    
+    :host(.show) .modal-dialog {
+      opacity: 1;
     }
     
     .modal-dialog .modal-container {
       background-color: var(--color1);
       border-radius: 3px;
       max-width: 400px;
+      transform: scale(0.2);
+      transition: transform 500ms ease;
       width: 100%;
+    }
+    
+    :host(.show) .modal-container {
+      transform: scale(1);
     }
     
     .modal-dialog .modal-header {
@@ -78,12 +91,22 @@ class ModalDialog extends HTMLElement {
 
   close = () => {
     this.elBody.classList.remove('has-modal');
-    this.el.classList.remove('open');
+    this.el.addEventListener('transitionend', this.onCloseEnd);
+    this.classList.remove('show');
+  };
+
+  onCloseEnd = () => {
+    this.el.removeEventListener('transitionend', this.onCloseEnd);
+    this.classList.remove('open');
   };
 
   open = () => {
     this.elBody.classList.add('has-modal');
-    this.el.classList.add('open');
+    this.classList.add('open');
+
+    setTimeout(() => {
+      this.classList.add('show');
+    }, 100);
   };
 
   attributeChangedCallback(name, oldValue, newValue) {
