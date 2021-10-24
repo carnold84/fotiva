@@ -13,7 +13,8 @@ class TextInput extends HTMLElement {
 
     .text-input .text-input-label {
       color: var(--file-input__label-color, #555555);
-      margin: 0 0 3px;
+      font-size: 0.9rem;
+      margin: 0 0 5px 3px;
     }
 
     .text-input .text-input-input {
@@ -57,7 +58,7 @@ class TextInput extends HTMLElement {
   elTextInputLabel;
 
   static get observedAttributes() {
-    return ['default', 'disabled', 'label', 'name'];
+    return ['default', 'disabled', 'label', 'name', 'type'];
   }
 
   constructor() {
@@ -113,6 +114,10 @@ class TextInput extends HTMLElement {
       } else {
         this.elTextInput.removeAttribute('disabled');
       }
+    }
+
+    if (name === 'type') {
+      this.elTextInput.setAttribute('type', newValue);
     }
   }
 

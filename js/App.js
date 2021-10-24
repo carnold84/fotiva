@@ -125,14 +125,17 @@ class App {
 
     this.state.responsiveImages.push(image);
 
-    if (
-      this.elDownloadBtn.hasAttribute('disabled') &&
-      this.state.responsiveImages.length > 0
-    ) {
-      this.elDownloadBtn.removeAttribute('disabled');
-    }
+    this.updateButtonState();
 
     this.createImageCard({ image });
+  };
+
+  updateButtonState = () => {
+    if (this.state.responsiveImages.length > 0) {
+      this.elDownloadBtn.removeAttribute('disabled');
+    } else {
+      this.elDownloadBtn.setAttribute('disabled', false);
+    }
   };
 
   onImageAdded = (evt) => {
@@ -141,6 +144,18 @@ class App {
     this.createImage(evt.detail);
 
     this.elAddImageModal.close();
+  };
+
+  onRemoveImage = (evt) => {
+    evt.preventDefault();
+
+    const { imageCard } = evt.detail;
+    const index = imageCard.index;
+    this.state.cards.splice(index, 1);
+    this.state.responsiveImages.splice(index, 1);
+    this.elImagePreview.removeChild(imageCard);
+
+    this.updateButtonState();
   };
 
   openAddImageModal = () => {
@@ -152,7 +167,9 @@ class App {
   createImageCard = ({ image }) => {
     const elImageCard = document.createElement('image-card');
     elImageCard.image = image;
+    elImageCard.index = this.state.cards.length;
     elImageCard.name = image.name;
+    elImageCard.addEventListener('remove', this.onRemoveImage);
     this.state.cards.push(elImageCard);
     this.elImagePreview.appendChild(elImageCard);
   };

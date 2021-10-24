@@ -8,7 +8,8 @@ class FileInput extends HTMLElement {
 
     .file-input .file-input-label {
       color: var(--file-input__label-color, #555555);
-      margin: 0 0 3px;
+      font-size: 0.9rem;
+      margin: 0 0 5px 3px;
     }
 
     .file-input .file-input-inner {

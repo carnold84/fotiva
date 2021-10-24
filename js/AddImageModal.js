@@ -48,6 +48,7 @@ class AddImageModal extends HTMLElement {
             id="image-height"
             label="Height"
             name="height"
+            type="number"
           >
           </text-input>
           <p>or</p>
@@ -56,6 +57,7 @@ class AddImageModal extends HTMLElement {
             id="image-width"
             label="Width"
             name="width"
+            type="number"
           >
           </text-input>
         </div>
@@ -87,31 +89,31 @@ class AddImageModal extends HTMLElement {
     this.elCancelBtn = shadow.querySelector('#cancel-btn');
     this.elAddBtn = shadow.querySelector('#create-image-btn');
     this.elMessage = shadow.querySelector('#message');
-    this.elHeightInput = shadow.querySelector('[name=height]');
-    this.elWidthInput = shadow.querySelector('[name=width]');
+    this.elHeightInput = shadow.querySelector('#image-height');
+    this.elWidthInput = shadow.querySelector('#image-width');
   }
 
-  onHeightInputBlur = () => {
-    if (isNaN(this.elHeightInput.value)) {
-      this.elHeightInput.value = 'auto';
+  onHeightInput = () => {
+    if (this.elHeightInput.value) {
+      this.elWidthInput.value = null;
     } else {
-      this.elWidthInput.value = 'auto';
+      this.elHeightInput.value = null;
     }
   };
 
-  onWidthInputBlur = () => {
-    if (isNaN(this.elWidthInput.value)) {
-      this.elWidthInput.value = 'auto';
+  onWidthInput = () => {
+    if (this.elWidthInput.value) {
+      this.elHeightInput.value = null;
     } else {
-      this.elHeightInput.value = 'auto';
+      this.elWidthInput.value = null;
     }
   };
 
   open = () => {
     this.elAddBtn.addEventListener('click', this.onAddBtnClick);
     this.elCancelBtn.addEventListener('click', this.onCloseBtnClick);
-    this.elHeightInput.addEventListener('blur', this.onHeightInputBlur);
-    this.elWidthInput.addEventListener('blur', this.onWidthInputBlur);
+    this.elHeightInput.addEventListener('change', this.onHeightInput);
+    this.elWidthInput.addEventListener('change', this.onWidthInput);
 
     this.elModal.open();
   };
@@ -119,8 +121,8 @@ class AddImageModal extends HTMLElement {
   close = () => {
     this.elAddBtn.removeEventListener('click', this.onAddBtnClick);
     this.elCancelBtn.removeEventListener('click', this.onCloseBtnClick);
-    this.elHeightInput.removeEventListener('blur', this.onHeightInputBlur);
-    this.elWidthInput.removeEventListener('blur', this.onWidthInputBlur);
+    this.elHeightInput.removeEventListener('change', this.onHeightInput);
+    this.elWidthInput.removeEventListener('change', this.onWidthInput);
 
     this.elModal.close();
 

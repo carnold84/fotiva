@@ -15,7 +15,7 @@ html {
   --file-input__label-color: var(--text-color2);
   --file-input__btn-color: var(--text-color1);
   --file-input__btn-bg-color: var(--color2);
-  --file-input__btn-border-color: var(--color3);
+  --file-input__btn-border-color: var(--color4);
   --file-input__btn-bg-color--focus: var(--color4);
   --file-input__btn-border-color--focus: var(--color5);
   --file-input__btn-bg-color--hover: var(--primary1);

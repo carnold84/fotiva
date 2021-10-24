@@ -29,8 +29,8 @@ class UIButton extends HTMLElement {
     }
     
     .ui-button:focus, .ui-button:hover {
-      background-color: var(--color5);
-      border: 1px solid var(--color6);
+      background-color: var(--primary1);
+      border: 1px solid var(--primary2);
       outline: none;
     }
     
@@ -41,7 +41,7 @@ class UIButton extends HTMLElement {
     
     :host([primary]) .ui-button:focus, :host([primary]) .ui-button:hover {
       background-color: var(--primary2);
-      border: 1px solid var(--primary3);
+      border: 1px solid var(--primary2);
     }
   `;
   template = `
