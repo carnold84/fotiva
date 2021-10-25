@@ -1,11 +1,6 @@
 class ImageCard extends HTMLElement {
   style = `
     :host {
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .image-card {
       background-color: var(--color2);
       border: 1px solid var(--color4);
       border-radius: 3px;
@@ -14,24 +9,25 @@ class ImageCard extends HTMLElement {
       overflow: hidden;
       text-decoration: none;
       transform: scale(0.7);
-      transition: opacity 500ms ease, transform 500ms ease;
+      transition: opacity 300ms ease, transform 300ms ease;
     }
     
-    .image-card.show {
+    :host(.show) {
       opacity: 1;
       transform: scale(1);
     }
     
-    .image-card .link {
+    :host .link {
+      display: block;
       text-decoration: none;
     }
     
-    .image-card .img {
+    :host .img {
       margin: 0;
       width: 100%;
     }
     
-    .image-card .name, .image-card .size {
+    :host .name, :host .size {
       color: var(--text-color1);
       font-size: 1rem;
       overflow: hidden;
@@ -39,21 +35,21 @@ class ImageCard extends HTMLElement {
       white-space: nowrap;
     }
     
-    .image-card .name {
-      color: var(--text-color1);
-      font-size: 1rem;
-      margin: 0 0 5px;
-      padding: 8px 10px 0;
-    }
-    
-    .image-card .size {
+    :host .name {
       color: var(--text-color2);
       font-size: 0.9rem;
-      margin: 0;
+      margin: 0 0 5px;
       padding: 0 10px 10px;
     }
+    
+    :host .size {
+      color: var(--text-color1);
+      font-size: 1.1rem;
+      margin: 0;
+      padding: 8px 10px 0;
+    }
 
-    .remove-btn {
+    :host .remove-btn {
       fill: #ffffff;
       position: absolute;
       right: 10px;
@@ -61,21 +57,18 @@ class ImageCard extends HTMLElement {
     }
   `;
   template = `
-    <div class="image-card">
       <a class="link" target="_blank" rel="noopener noreferrer">
         <img class="img" crossorigin="anonymous" />
-        <p class="name"></p>
         <p class="size"></p>
+        <p class="name"></p>
       </a>
       <ui-button class="remove-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px">
           <path d="M0 0h24v24H0z" fill="none"/>
           <path d="M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
         </svg>
       </ui-button>
-    </div>
   `;
-  elImageCard;
   elImg;
   elLink;
   elRemoveBtn;
@@ -93,7 +86,6 @@ class ImageCard extends HTMLElement {
     shadow.innerHTML = this.template;
     shadow.appendChild(style);
 
-    this.elImageCard = shadow.querySelector('.image-card');
     this.elImg = shadow.querySelector('.img');
     this.elLink = shadow.querySelector('.link');
     this.elName = shadow.querySelector('.name');
@@ -119,26 +111,26 @@ class ImageCard extends HTMLElement {
 
   show() {
     console.log('show');
-    this.elImageCard.offsetWidth;
-    this.elImageCard.classList.add('show');
-    console.log(this.elImageCard.offsetWidth);
+    this.offsetWidth;
+    this.classList.add('show');
+    console.log(this.offsetWidth);
   }
 
   hide(callback) {
     const onHidden = () => {
-      this.elImageCard.removeEventListener('transitionend', onHidden);
+      this.removeEventListener('transitionend', onHidden);
       this.remove();
       callback();
     };
 
-    this.elImageCard.addEventListener('transitionend', onHidden);
-    this.elImageCard.classList.remove('show');
+    this.addEventListener('transitionend', onHidden);
+    this.classList.remove('show');
   }
 
   set image(image) {
     this.img.onload = () => {
       this.elImg.src = this.img.src;
-      this.elSize.innerHTML = `${this.img.height} x ${this.img.width}`;
+      this.elSize.innerHTML = `${this.img.height}h x ${this.img.width}w`;
     };
     this.img.src = image.src;
     this.elLink.setAttribute('href', image.url);

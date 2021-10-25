@@ -15,8 +15,7 @@ class ModalDialog extends HTMLElement {
       opacity: 0;
       position: fixed;
       top: 0;
-      transform: opacity;
-      transition: opacity 500ms ease;
+      transition: opacity 300ms ease;
       width: 100%;
     }
     
@@ -32,8 +31,8 @@ class ModalDialog extends HTMLElement {
       background-color: var(--color1);
       border-radius: 3px;
       max-width: 400px;
-      transform: scale(0.2);
-      transition: transform 500ms ease;
+      transform: scale(0.5);
+      transition: transform 300ms ease;
       width: 100%;
     }
     
