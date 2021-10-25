@@ -10,8 +10,16 @@ class ImageCard extends HTMLElement {
       border: 1px solid var(--color4);
       border-radius: 3px;
       display: block;
+      opacity: 0;
       overflow: hidden;
       text-decoration: none;
+      transform: scale(0.7);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+    
+    .image-card.show {
+      opacity: 1;
+      transform: scale(1);
     }
     
     .image-card .link {
@@ -105,13 +113,27 @@ class ImageCard extends HTMLElement {
   }
 
   onRemove = () => {
-    const removeEvent = new CustomEvent('remove', {
-      detail: {
-        imageCard: this,
-      },
-    });
+    const removeEvent = new CustomEvent('remove');
     this.dispatchEvent(removeEvent);
   };
+
+  show() {
+    console.log('show');
+    this.elImageCard.offsetWidth;
+    this.elImageCard.classList.add('show');
+    console.log(this.elImageCard.offsetWidth);
+  }
+
+  hide(callback) {
+    const onHidden = () => {
+      this.elImageCard.removeEventListener('transitionend', onHidden);
+      this.remove();
+      callback();
+    };
+
+    this.elImageCard.addEventListener('transitionend', onHidden);
+    this.elImageCard.classList.remove('show');
+  }
 
   set image(image) {
     this.img.onload = () => {

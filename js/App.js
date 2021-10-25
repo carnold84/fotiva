@@ -149,13 +149,16 @@ class App {
   onRemoveImage = (evt) => {
     evt.preventDefault();
 
-    const { imageCard } = evt.detail;
-    const index = imageCard.index;
-    this.state.cards.splice(index, 1);
-    this.state.responsiveImages.splice(index, 1);
-    this.elImagePreview.removeChild(imageCard);
+    console.log(evt);
 
-    this.updateButtonState();
+    const imageCard = evt.target;
+    const index = imageCard.index;
+    imageCard.hide(() => {
+      this.state.cards.splice(index, 1);
+      this.state.responsiveImages.splice(index, 1);
+
+      this.updateButtonState();
+    });
   };
 
   openAddImageModal = () => {
@@ -172,6 +175,7 @@ class App {
     elImageCard.addEventListener('remove', this.onRemoveImage);
     this.state.cards.push(elImageCard);
     this.elImagePreview.appendChild(elImageCard);
+    elImageCard.show();
   };
 }
 
