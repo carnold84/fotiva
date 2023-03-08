@@ -80,8 +80,8 @@ class App {
   };
 
   createImageName = (image) => {
-    return `${this.elFileName.value}-${Math.round(image.height)}x${Math.round(
-      image.width
+    return `${this.elFileName.value}-${Math.round(image.width)}x${Math.round(
+      image.height
     )}.${image.ext}`;
   };
 
@@ -148,8 +148,6 @@ class App {
 
   onRemoveImage = (evt) => {
     evt.preventDefault();
-
-    console.log(evt);
 
     const imageCard = evt.target;
     const index = imageCard.index;

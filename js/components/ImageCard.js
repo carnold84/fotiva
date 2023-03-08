@@ -136,10 +136,8 @@ class ImageCard extends HTMLElement {
   };
 
   show() {
-    console.log('show');
     this.offsetWidth;
     this.classList.add('show');
-    console.log(this.offsetWidth);
   }
 
   hide(callback) {
