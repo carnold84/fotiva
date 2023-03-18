@@ -43,6 +43,12 @@ class UIButton extends HTMLElement {
       background-color: var(--primary2);
       border: 1px solid var(--primary2);
     }
+    
+    :host([disabled][primary]) .ui-button {
+      color: var(--text-color1);
+      fill: var(--text-color1);
+      opacity: 0.5;
+    }
   `;
   template = `
     <button class="ui-button">

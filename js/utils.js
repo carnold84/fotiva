@@ -14,24 +14,17 @@ export const createZip = async (images) => {
   });
 };
 
-export const resizeImages = async ({ file, sizes }) => {
+export const createImage = async ({ file, size }) => {
   return new Promise((resolve, reject) => {
-    const images = [];
-    let count = 0;
-
-    const createImage = async ({ height, width }) => {
-      const image = await resizeImage({ file, height, width });
-      images.push(image);
-
-      if (count === sizes.length - 1) {
-        resolve(images);
-      }
-      count++;
+    const createImage = async ({ size }) => {
+      return await resizeImage({
+        file,
+        height: size.height,
+        width: size.width,
+      });
     };
 
-    sizes.forEach(({ height, width }) => {
-      createImage({ height, width });
-    });
+    resolve(createImage({ size }));
   });
 };
 

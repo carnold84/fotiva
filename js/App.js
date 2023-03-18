@@ -1,21 +1,25 @@
-import { createZip, resizeImage, resizeImages } from './utils.js';
+import { createImage, createZip, resizeImage } from './utils.js';
 // import web components
 import './AddImageModal.js';
+import './AddPresetModal.js';
 import './components/FileInput.js';
 import './components/ImageCard.js';
 import './components/ModalDialog.js';
+import './components/PresetItem.js';
 import './components/TextInput.js';
 import './components/UIButton.js';
 
 class App {
+  data = JSON.parse(localStorage.getItem('fotiva') ?? '{}');
   state = {
-    cards: [],
-    responsiveImages: [],
+    presets: this.data.presets ?? [],
+    images: [],
     selectedFile: undefined,
   };
 
   init = () => {
     this.elAddImageModal = document.querySelector('#add-image-modal');
+    this.elAddPresetModal = document.querySelector('#add-preset-modal');
 
     this.elAddImageBtn = document.querySelector('#add-image-btn');
     this.elAddImageBtn.addEventListener('click', this.onAddImageBtnClick);
@@ -35,6 +39,38 @@ class App {
 
     this.elFileName = document.querySelector('#file-name');
     this.elFileName.addEventListener('change', this.onFileNameChange);
+
+    this.elAddPresetBtn = document.querySelector('#add-preset-btn');
+    this.elAddPresetBtn.addEventListener('click', this.onAddPresetBtnClick);
+
+    this.elPresetsEmptyMessage = document.querySelector(
+      '#presets-empty-message'
+    );
+    this.elPresetsList = document.querySelector('#presets-list');
+
+    this.renderPresets();
+
+    this.updateButtonState();
+  };
+
+  renderPresets = () => {
+    this.elPresetsList.innerHTML = '';
+    this.presetElements = [];
+
+    if (this.state.presets?.length > 0) {
+      for (const preset of this.state.presets) {
+        const elListItem = document.createElement('li');
+        const elPreset = document.createElement('preset-item');
+        elPreset.preset = preset;
+        elPreset.addEventListener('apply', this.onApplyPresetBtnClick);
+        this.presetElements.push(elPreset);
+        elListItem.appendChild(elPreset);
+        this.elPresetsList.appendChild(elListItem);
+      }
+      this.elPresetsList.classList.add('show');
+    } else {
+      this.elPresetsEmptyMessage.classList.add('show');
+    }
   };
 
   setError = (message) => {
@@ -53,28 +89,32 @@ class App {
       // enable adding a new size image as we have an image to size!
       this.elAddImageBtn.removeAttribute('disabled');
 
-      if (this.state.responsiveImages.length > 0) {
+      if (this.state.images.length > 0) {
         // remove existing files from dom
         this.elImagePreview.innerHTML = '';
 
-        const sizes = this.state.responsiveImages.map(({ height, width }) => {
-          return {
-            height,
-            width,
-          };
-        });
-
-        this.state.responsiveImages = await resizeImages({
-          file: this.state.selectedFile,
-          sizes,
-        });
-
-        this.state.responsiveImages.forEach((image) => {
-          image.name = this.createImageName(image);
-          this.createImageCard({ image });
-        });
+        for (const image of this.state.images) {
+          const nextImage = await createImage({
+            file: this.state.selectedFile,
+            size: image.size,
+          });
+          nextImage.name = this.createImageName(nextImage);
+          image.data = nextImage;
+          image.el = this.createImageCard({ image: nextImage });
+          this.elImagePreview.appendChild(image.el);
+        }
       } else {
         this.elFileName.setAttribute('disabled', false);
+      }
+
+      if (this.state.selectedFile) {
+        this.presetElements.forEach((elPreset) => {
+          elPreset.removeAttribute('disabled');
+        });
+      } else {
+        this.presetElements.forEach((elPreset) => {
+          elPreset.setAttribute('disabled', true);
+        });
       }
     }
   };
@@ -86,19 +126,21 @@ class App {
   };
 
   onFileNameChange = (evt) => {
-    this.state.cards.forEach((card) => {
-      card.name = this.createImageName(card.image);
-    });
-    this.state.responsiveImages.forEach((image) => {
-      image.name = this.createImageName(image);
+    this.state.images.forEach((image) => {
+      const nextName = this.createImageName(image.data);
+      image.el.name = nextName;
+      image.data.name = nextName;
     });
   };
 
   onDownloadBtnClick = async (evt) => {
     evt.preventDefault();
 
-    if (this.state.responsiveImages) {
-      const imageZip = await createZip(this.state.responsiveImages);
+    if (this.state.images) {
+      const imagesData = this.state.images.map(({ data }) => {
+        return data;
+      });
+      const imageZip = await createZip(imagesData);
 
       let zipFile = await imageZip.generateAsync({ type: 'blob' });
 
@@ -114,6 +156,22 @@ class App {
     this.openAddImageModal();
   };
 
+  onAddPresetBtnClick = (evt) => {
+    evt.preventDefault();
+
+    this.openAddPresetModal();
+  };
+
+  onApplyPresetBtnClick = (evt) => {
+    evt.preventDefault();
+
+    evt.detail.preset.sizes.forEach(({ height, width }) => {
+      this.createImage({ height, width });
+    });
+
+    console.log(evt);
+  };
+
   createImage = async ({ height, width }) => {
     const image = await resizeImage({
       file: this.state.selectedFile,
@@ -122,19 +180,32 @@ class App {
     });
 
     image.name = this.createImageName(image);
+    image.id = `image-${Date.now()}`;
+    const elImageCard = this.createImageCard({
+      image,
+    });
 
-    this.state.responsiveImages.push(image);
+    this.state.images.push({
+      data: image,
+      el: elImageCard,
+      id: image.id,
+      size: {
+        height,
+        width,
+      },
+    });
 
+    this.elImagePreview.appendChild(elImageCard);
     this.updateButtonState();
-
-    this.createImageCard({ image });
   };
 
   updateButtonState = () => {
-    if (this.state.responsiveImages.length > 0) {
+    if (this.state.images.length > 0) {
       this.elDownloadBtn.removeAttribute('disabled');
+      this.elAddPresetBtn.removeAttribute('disabled');
     } else {
-      this.elDownloadBtn.setAttribute('disabled', false);
+      this.elDownloadBtn.setAttribute('disabled', true);
+      this.elAddPresetBtn.setAttribute('disabled', true);
     }
   };
 
@@ -143,6 +214,7 @@ class App {
 
     this.createImage(evt.detail);
 
+    this.elAddImageModal.removeEventListener('image-added', this.onImageAdded);
     this.elAddImageModal.close();
   };
 
@@ -150,10 +222,10 @@ class App {
     evt.preventDefault();
 
     const imageCard = evt.target;
-    const index = imageCard.index;
     imageCard.hide(() => {
-      this.state.cards.splice(index, 1);
-      this.state.responsiveImages.splice(index, 1);
+      this.state.images = this.state.images.filter((image) => {
+        return image.id !== imageCard.id;
+      });
 
       this.updateButtonState();
     });
@@ -161,19 +233,53 @@ class App {
 
   openAddImageModal = () => {
     this.elAddImageModal.addEventListener('image-added', this.onImageAdded);
-
+    this.elAddImageModal.addEventListener('close', this.onAddImageModalClose);
     this.elAddImageModal.open();
+  };
+
+  openAddPresetModal = () => {
+    this.elAddPresetModal.addEventListener('preset-added', this.onPresetAdded);
+    this.elAddPresetModal.addEventListener('close', this.onAddPresetModalClose);
+    this.elAddPresetModal.open();
+  };
+
+  onPresetAdded = (evt) => {
+    evt.preventDefault();
+
+    const nextPreset = {
+      id: `preset-${Date.now()}`,
+      name: evt.detail.name,
+      sizes: this.state.images.map(({ size }) => {
+        return size;
+      }),
+    };
+    this.state.presets.push(nextPreset);
+    localStorage.setItem(
+      'fotiva',
+      JSON.stringify({
+        ...this.data,
+        presets: this.state.presets,
+      })
+    );
+
+    this.elAddPresetModal.removeEventListener(
+      'preset-added',
+      this.onImageAdded
+    );
+    this.elAddPresetModal.close();
+
+    this.renderPresets();
   };
 
   createImageCard = ({ image }) => {
     const elImageCard = document.createElement('image-card');
     elImageCard.image = image;
-    elImageCard.index = this.state.cards.length;
+    elImageCard.id = image.id;
     elImageCard.name = image.name;
     elImageCard.addEventListener('remove', this.onRemoveImage);
-    this.state.cards.push(elImageCard);
-    this.elImagePreview.appendChild(elImageCard);
     elImageCard.show();
+
+    return elImageCard;
   };
 }
 

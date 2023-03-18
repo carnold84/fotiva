@@ -135,6 +135,10 @@ class FileInput extends HTMLElement {
       this.elFileInputLabel.innerHTML = label;
     }
   };
+
+  disconnectedCallback() {
+    this.elFileInput.removeEventListener('change', this.onChange);
+  }
 }
 
 customElements.define('file-input', FileInput);
